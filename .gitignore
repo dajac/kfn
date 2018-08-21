@@ -1,3 +1,10 @@
+# Golang
+bin/
+vendor/
+
+# VSCode
+.vscode/
+
 # Binaries for programs and plugins
 *.exe
 *.exe~

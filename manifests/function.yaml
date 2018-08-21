@@ -1,0 +1,11 @@
+apiVersion: kfn.dajac.io/v1alpha1
+kind: Function
+metadata:
+  name: copy-function
+spec:
+  replicas: 5
+  image: dajac/kfn-invoker:0.1.0
+  class: io.dajac.kfn.functions.CopyFunction
+  input: dajac.stage.input
+  output: dajac.stage.output
+  

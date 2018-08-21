@@ -1,0 +1,41 @@
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: functions.kfn.dajac.io
+spec:
+  group: kfn.dajac.io
+  version: v1alpha1
+  names:
+    kind: Function
+    plural: functions
+  scope: Namespaced
+  subresources:
+    status: {}
+    scale:
+      specReplicasPath: .spec.replicas
+      statusReplicasPath: .status.availableReplicas
+  additionalPrinterColumns:
+    - name: Image
+      type: string
+      description: The image of the Function
+      JSONPath: .spec.image
+    - name: Class
+      type: string
+      description: The class of the Function
+      JSONPath: .spec.class
+    - name: Input Topic
+      type: string
+      description: The input topic of the Function
+      JSONPath: .spec.input
+    - name: Output Topic
+      type: string
+      description: The output topic of the Function
+      JSONPath: .spec.output
+    - name: Desired
+      type: integer
+      description: The number of Functions desired
+      JSONPath: .spec.replicas
+    - name: Available
+      type: integer
+      description: The number of Functions launched
+      JSONPath: .status.availableReplicas
