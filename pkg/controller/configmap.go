@@ -100,7 +100,25 @@ func getProperties(function *kfnv1alpha1.Function) map[string]string {
 		"consumer.group.id": function.Name,
 	}
 
+	if function.Spec.FunctionConfig != nil {
+		copyWithPrefix(*function.Spec.FunctionConfig, props, "function")
+	}
+
+	if function.Spec.ConsumerConfig != nil {
+		copyWithPrefix(*function.Spec.ConsumerConfig, props, "consumer")
+	}
+
+	if function.Spec.ProducerConfig != nil {
+		copyWithPrefix(*function.Spec.ProducerConfig, props, "producer")
+	}
+
 	return mergeMap(defaultProperties, props)
+}
+
+func copyWithPrefix(src map[string]string, dst map[string]string, prefix string) {
+	for key, value := range src {
+		dst[fmt.Sprintf("%s.%s", prefix, key)] = value
+	}
 }
 
 func mergeMap(a map[string]string, b map[string]string) map[string]string {

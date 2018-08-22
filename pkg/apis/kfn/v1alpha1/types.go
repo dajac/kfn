@@ -22,10 +22,12 @@ type FunctionSpec struct {
 	Input    string `json:"input"`
 	Output   string `json:"output"`
 
+	FunctionConfig *map[string]string `json:"function"`
+	ConsumerConfig *map[string]string `json:"consumer"`
+	ProducerConfig *map[string]string `json:"producer"`
+
 	// TODO
 	// - serdes (keys, values)
-	// - custom config for consumer and producer
-	// - custom config for functions
 	// - request and limits
 	// - secrets
 }

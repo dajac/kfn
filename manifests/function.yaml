@@ -8,4 +8,10 @@ spec:
   class: io.dajac.kfn.functions.CopyFunction
   input: dajac.stage.input
   output: dajac.stage.output
+
+  function:
+    hashKey: "12345"
+
+  consumer:
+    enable.auto.commit: "true"
   
