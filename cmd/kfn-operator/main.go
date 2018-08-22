@@ -15,16 +15,32 @@ import (
 	clientset "github.com/dajac/kfn/pkg/client/clientset/versioned"
 	informers "github.com/dajac/kfn/pkg/client/informers/externalversions"
 	"github.com/dajac/kfn/pkg/controller"
+
+	customflag "github.com/dajac/kfn/pkg/flag"
 )
 
 var (
 	masterURL  string
 	kubeconfig string
+
+	kafkaBoostrap         string
+	functionDefaultConfig customflag.Config
+	consumerDefaultConfig customflag.Config
+	producerDefaultConfig customflag.Config
 )
 
 func init() {
 	flag.StringVar(&kubeconfig, "kubeconfig", "", "Path to a kubeconfig. Only required if out-of-cluster.")
 	flag.StringVar(&masterURL, "master", "", "The address of the Kubernetes API server. Overrides any value in kubeconfig. Only required if out-of-cluster.")
+
+	functionDefaultConfig = customflag.Config{}
+	consumerDefaultConfig = customflag.Config{}
+	producerDefaultConfig = customflag.Config{}
+
+	flag.StringVar(&kafkaBoostrap, "kafka", "", "The address of the Kafka cluster.")
+	flag.Var(&functionDefaultConfig, "function", "Set default configuration for all functions (key:value).")
+	flag.Var(&consumerDefaultConfig, "consumer", "Set default configuration for all functions (key:value).")
+	flag.Var(&producerDefaultConfig, "producer", "Set default configuration for all functions (key:value).")
 }
 
 func main() {
@@ -53,13 +69,20 @@ func main() {
 	kubeInformerFactory := kubeinformers.NewSharedInformerFactory(kubeClient, time.Second*30)
 	kfnInformerFactory := informers.NewSharedInformerFactory(kfnClient, time.Second*30)
 
-	// TODO: Create controller
+	functionDefaultConfig := controller.FunctionDefaultConfig{
+		KafkaBoostrap: kafkaBoostrap,
+		Function:      functionDefaultConfig,
+		Consumer:      consumerDefaultConfig,
+		Producer:      producerDefaultConfig,
+	}
+
 	controller := controller.NewController(
 		kubeClient,
 		kfnClient,
 		kubeInformerFactory.Apps().V1().Deployments(),
 		kubeInformerFactory.Core().V1().ConfigMaps(),
 		kfnInformerFactory.Kfn().V1alpha1().Functions(),
+		functionDefaultConfig,
 	)
 
 	go kubeInformerFactory.Start(stopCh)

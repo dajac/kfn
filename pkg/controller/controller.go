@@ -32,6 +32,8 @@ type Controller struct {
 	functionLister    listers.FunctionLister
 	functionSynced    cache.InformerSynced
 
+	functionDefaultConfig FunctionDefaultConfig
+
 	workqueue workqueue.RateLimitingInterface
 }
 
@@ -40,18 +42,20 @@ func NewController(
 	kfnClient clientset.Interface,
 	deployementInformer appsinformers.DeploymentInformer,
 	configMapInformer coreinformers.ConfigMapInformer,
-	functionInformer informers.FunctionInformer) *Controller {
+	functionInformer informers.FunctionInformer,
+	functionBaseConfig FunctionDefaultConfig) *Controller {
 
 	controller := &Controller{
-		kubeClient:        kubeClient,
-		kfnClient:         kfnClient,
-		deployementLister: deployementInformer.Lister(),
-		deployementSynced: deployementInformer.Informer().HasSynced,
-		configMapLister:   configMapInformer.Lister(),
-		configMapSynched:  configMapInformer.Informer().HasSynced,
-		functionLister:    functionInformer.Lister(),
-		functionSynced:    functionInformer.Informer().HasSynced,
-		workqueue:         workqueue.NewNamedRateLimitingQueue(workqueue.DefaultControllerRateLimiter(), "Functions"),
+		kubeClient:            kubeClient,
+		kfnClient:             kfnClient,
+		deployementLister:     deployementInformer.Lister(),
+		deployementSynced:     deployementInformer.Informer().HasSynced,
+		configMapLister:       configMapInformer.Lister(),
+		configMapSynched:      configMapInformer.Informer().HasSynced,
+		functionLister:        functionInformer.Lister(),
+		functionSynced:        functionInformer.Informer().HasSynced,
+		functionDefaultConfig: functionBaseConfig,
+		workqueue:             workqueue.NewNamedRateLimitingQueue(workqueue.DefaultControllerRateLimiter(), "Functions"),
 	}
 
 	deployementInformer.Informer().AddEventHandler(cache.ResourceEventHandlerFuncs{
@@ -182,18 +186,21 @@ func (c *Controller) syncHandler(key string) error {
 		return err
 	}
 
+	functionConfig := newFunctionConfig(&c.functionDefaultConfig, function)
+
 	glog.Infof("%+v", function)
+	glog.Infof("%+v", functionConfig)
 
 	configmap, err := c.configMapLister.ConfigMaps(namespace).Get(name)
 	if err != nil {
 		if errors.IsNotFound(err) {
 			// Create ConfigMap
 			glog.Info("Create ConfigMap")
-			configmap, err = c.kubeClient.CoreV1().ConfigMaps(namespace).Create(newConfigMap(function))
+			configmap, err = c.kubeClient.CoreV1().ConfigMaps(namespace).Create(newConfigMap(function, functionConfig))
 		}
 	} else {
 		glog.Info("Update ConfigMap")
-		newConfigMap := newConfigMap(function)
+		newConfigMap := newConfigMap(function, functionConfig)
 
 		curHash := hash(configmap)
 		newHash := hash(newConfigMap)

@@ -3,9 +3,6 @@ package controller
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"fmt"
-	"sort"
-	"strings"
 
 	kfnv1alpha1 "github.com/dajac/kfn/pkg/apis/kfn/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
@@ -39,21 +36,7 @@ data:
 	function.output=dajac.dev.output
 */
 
-var defaultProperties = map[string]string{
-	"consumer.bootstrap.servers":  "kafka-headless:9092",
-	"consumer.group.id":           "CHANGE ME",
-	"consumer.auto.offset.reset":  "earliest",
-	"consumer.key.deserializer":   "org.apache.kafka.common.serialization.ByteArrayDeserializer",
-	"consumer.value.deserializer": "org.apache.kafka.common.serialization.ByteArrayDeserializer",
-
-	"producer.bootstrap.servers": "kafka-headless:9092",
-	"producer.acks":              "all",
-	"producer.retries":           "3",
-	"producer.key.serializer":    "org.apache.kafka.common.serialization.ByteArraySerializer",
-	"producer.value.serializer":  "org.apache.kafka.common.serialization.ByteArraySerializer",
-}
-
-func newConfigMap(function *kfnv1alpha1.Function) *corev1.ConfigMap {
+func newConfigMap(function *kfnv1alpha1.Function, config *FunctionConfig) *corev1.ConfigMap {
 	return &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      function.Name,
@@ -67,57 +50,8 @@ func newConfigMap(function *kfnv1alpha1.Function) *corev1.ConfigMap {
 			},
 		},
 		Data: map[string]string{
-			"function.properties": serializeProperties(getProperties(function)),
+			"function.properties": config.SerializeAsProperties(),
 		},
-	}
-}
-
-func serializeProperties(props map[string]string) string {
-	sortedKeys := make([]string, 0, len(props))
-
-	for key := range props {
-		sortedKeys = append(sortedKeys, key)
-	}
-
-	sort.Strings(sortedKeys)
-
-	builder := strings.Builder{}
-
-	for _, key := range sortedKeys {
-		builder.WriteString(fmt.Sprintf("%s=%s\n", key, props[key]))
-	}
-
-	return builder.String()
-}
-
-func getProperties(function *kfnv1alpha1.Function) map[string]string {
-	props := map[string]string{
-		"function.name":   function.Name,
-		"function.class":  function.Spec.Class,
-		"function.input":  function.Spec.Input,
-		"function.output": function.Spec.Output,
-
-		"consumer.group.id": function.Name,
-	}
-
-	if function.Spec.FunctionConfig != nil {
-		copyWithPrefix(*function.Spec.FunctionConfig, props, "function")
-	}
-
-	if function.Spec.ConsumerConfig != nil {
-		copyWithPrefix(*function.Spec.ConsumerConfig, props, "consumer")
-	}
-
-	if function.Spec.ProducerConfig != nil {
-		copyWithPrefix(*function.Spec.ProducerConfig, props, "producer")
-	}
-
-	return mergeMap(defaultProperties, props)
-}
-
-func copyWithPrefix(src map[string]string, dst map[string]string, prefix string) {
-	for key, value := range src {
-		dst[fmt.Sprintf("%s.%s", prefix, key)] = value
 	}
 }
 

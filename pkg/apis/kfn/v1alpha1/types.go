@@ -16,20 +16,18 @@ type Function struct {
 }
 
 type FunctionSpec struct {
-	Image    string `json:"image"`
-	Replicas int32  `json:"replicas"`
-	Class    string `json:"class"`
-	Input    string `json:"input"`
-	Output   string `json:"output"`
-
-	FunctionConfig *map[string]string `json:"function"`
-	ConsumerConfig *map[string]string `json:"consumer"`
-	ProducerConfig *map[string]string `json:"producer"`
-
-	// TODO
-	// - serdes (keys, values)
-	// - request and limits
-	// - secrets
+	Image                  string             `json:"image"`
+	Replicas               int32              `json:"replicas"`
+	Class                  string             `json:"class"`
+	Input                  string             `json:"input"`
+	InputKeyDeserializer   string             `json:"inputKeyDeserializer"`
+	InputValueDeserializer string             `json:"inputValueDeserializer"`
+	Output                 string             `json:"output"`
+	OutputKeySerializer    string             `json:"outputKeySerializer"`
+	OutoutValueSerializer  string             `json:"outputValueSerializer"`
+	FunctionConfig         *map[string]string `json:"function"`
+	ConsumerConfig         *map[string]string `json:"consumer"`
+	ProducerConfig         *map[string]string `json:"producer"`
 }
 
 type FunctionStatus struct {

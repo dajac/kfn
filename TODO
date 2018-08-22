@@ -1,9 +1,4 @@
-- Dockerfile for the Operator
-- Deployement/RBAC/Service Account
-- Config flags to pass over default values (e.g. kafka boostrap)
-- Consumer and Producer config in Function type
-- Function config in Function type
-- Serdes for input's key/value and output's key/value
+- Clean logs
 - Autoscaler based on the lag
 - Publish Java API
 - Exemple of Function which uses the Java API

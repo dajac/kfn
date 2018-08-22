@@ -6,12 +6,12 @@ spec:
   replicas: 5
   image: dajac/kfn-invoker:0.0.1
   class: io.dajac.kfn.functions.CopyFunction
+  
   input: dajac.stage.input
+  inputKeyDeserializer: string
+  inputValueDeserializer: string
+  
   output: dajac.stage.output
-
-  function:
-    hashKey: "12345"
-
-  consumer:
-    enable.auto.commit: "true"
+  outputKeySerializer: string
+  outputValueSerializer: string
   
