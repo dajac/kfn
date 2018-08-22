@@ -10,4 +10,4 @@ RUN ROOT=$(pwd) ./hack/build.bash
 #final stage
 FROM alpine:latest
 COPY --from=builder /go/src/github.com/dajac/kfn/bin/kfn-operator /kfn-operator
-ENTRYPOINT ./kfn-operator
+ENTRYPOINT /kfn-operator

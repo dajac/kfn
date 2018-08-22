@@ -4,7 +4,7 @@ ROOT=${ROOT:-$(git rev-parse --show-toplevel)}
 
 ORG=dajac
 NAME=kfn-operator
-VERSION=0.1.0
+VERSION=0.0.1
 #VERSION=$(git describe --tags --dirty)
 #COMMIT_HASH=$(git rev-parse --short HEAD 2>/dev/null)
 #DATE=$(date "+%Y-%m-%d")
