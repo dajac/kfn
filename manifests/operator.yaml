@@ -60,6 +60,9 @@ spec:
       containers:
       - name: kfn-operator
         image: dajac/kfn-operator:0.0.1
+        imagePullPolicy: Always
         command:
           - /kfn-operator
           - -stderrthreshold=INFO
+          - -consumer=auto.offset.reset:earliest
+          - -kafka=kafka-headless:9092
