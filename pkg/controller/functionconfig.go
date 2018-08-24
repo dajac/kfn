@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"bytes"
 	"fmt"
 	"sort"
 	"strings"
@@ -163,8 +164,25 @@ func serializeMap(builder *strings.Builder, props map[string]string, prefix stri
 	sort.Strings(sortedKeys)
 
 	for _, key := range sortedKeys {
-		builder.WriteString(fmt.Sprintf("%s.%s=%s\n", prefix, key, props[key]))
+		builder.WriteString(fmt.Sprintf("%s.%s=%s\n", prefix, key, escape(props[key])))
 	}
+}
+
+func escape(s string) string {
+	buffer := bytes.Buffer{}
+
+	for _, ch := range s {
+		switch ch {
+		case '\n':
+			buffer.WriteString("\\n")
+		case '\r':
+			buffer.WriteString("\\r")
+		default:
+			buffer.WriteRune(ch)
+		}
+	}
+
+	return buffer.String()
 }
 
 func copyWithPrefix(src map[string]string, dst map[string]string) {
