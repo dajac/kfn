@@ -14,7 +14,7 @@ import (
 
 	clientset "github.com/dajac/kfn/pkg/client/clientset/versioned"
 	informers "github.com/dajac/kfn/pkg/client/informers/externalversions"
-	"github.com/dajac/kfn/pkg/controller"
+	controller "github.com/dajac/kfn/pkg/controller/function"
 
 	customflag "github.com/dajac/kfn/pkg/flag"
 )
