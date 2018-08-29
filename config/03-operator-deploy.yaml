@@ -16,7 +16,7 @@ spec:
       serviceAccountName: kfn-operator
       containers:
       - name: kfn-operator
-        image: dajac/kfn-operator:0.0.1
+        image: dajac/kfn-operator:0.1.0
         imagePullPolicy: Always
         command:
           - /kfn-operator
