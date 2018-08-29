@@ -34,8 +34,8 @@ fi
 
 payload=$(
   jq --null-input \
-     --arg tag "$VERSION" \
-     --arg name "$VERSION" \
+     --arg tag "$FULLVERSION" \
+     --arg name "$FULLVERSION" \
      '{ tag_name: $tag, name: $name, draft: true }'
 )
 
