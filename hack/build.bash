@@ -3,9 +3,6 @@
 ROOT=${ROOT:-$(git rev-parse --show-toplevel)}
 
 NAME=kfn-operator
-#VERSION=$(git describe --tags --dirty)
-#COMMIT_HASH=$(git rev-parse --short HEAD 2>/dev/null)
-#DATE=$(date "+%Y-%m-%d")
 
 PLATFORM=$(go env GOOS)
 ARCH=$(go env GOARCH)
