@@ -89,17 +89,14 @@ func (c *Controller) Run(threadiness int, stopCh <-chan struct{}) error {
 	defer runtime.HandleCrash()
 	defer c.workqueue.ShutDown()
 
-	// Start the informer factories to begin populating the informer caches
-	glog.Info("Starting Foo controller")
+	glog.Info("Starting Function controller")
 
-	// Wait for the caches to be synced before starting workers
 	glog.Info("Waiting for informer caches to sync")
 	if ok := cache.WaitForCacheSync(stopCh, c.deployementSynced, c.configMapSynched, c.functionSynced); !ok {
 		return fmt.Errorf("failed to wait for caches to sync")
 	}
 
 	glog.Info("Starting workers")
-	// Launch two workers to process Foo resources
 	for i := 0; i < threadiness; i++ {
 		go wait.Until(c.runWorker, time.Second, stopCh)
 	}
@@ -123,39 +120,23 @@ func (c *Controller) processNextWorkItem() bool {
 		return false
 	}
 
-	// We wrap this block in a func so we can defer c.workqueue.Done.
 	err := func(obj interface{}) error {
-		// We call Done here so the workqueue knows we have finished
-		// processing this item. We also must remember to call Forget if we
-		// do not want this work item being re-queued. For example, we do
-		// not call Forget if a transient error occurs, instead the item is
-		// put back on the workqueue and attempted again after a back-off
-		// period.
 		defer c.workqueue.Done(obj)
 		var key string
 		var ok bool
-		// We expect strings to come off the workqueue. These are of the
-		// form namespace/name. We do this as the delayed nature of the
-		// workqueue means the items in the informer cache may actually be
-		// more up to date that when the item was initially put onto the
-		// workqueue.
+
 		if key, ok = obj.(string); !ok {
-			// As the item in the workqueue is actually invalid, we call
-			// Forget here else we'd go into a loop of attempting to
-			// process a work item that is invalid.
 			c.workqueue.Forget(obj)
 			runtime.HandleError(fmt.Errorf("expected string in workqueue but got %#v", obj))
 			return nil
 		}
-		// Run the syncHandler, passing it the namespace/name string of the
-		// Foo resource to be synced.
+
 		if err := c.syncHandler(key); err != nil {
 			return fmt.Errorf("error syncing '%s': %s", key, err.Error())
 		}
-		// Finally, if no error occurs we Forget this item so it does not
-		// get queued again until another change happens.
+
 		c.workqueue.Forget(obj)
-		glog.Infof("Successfully synced '%s'", key)
+
 		return nil
 	}(obj)
 
@@ -188,32 +169,23 @@ func (c *Controller) syncHandler(key string) error {
 
 	functionConfig := newFunctionConfig(&c.functionDefaultConfig, function)
 
-	glog.Infof("%+v", function)
-	glog.Infof("%+v", functionConfig)
-
 	configmap, err := c.configMapLister.ConfigMaps(namespace).Get(name)
 	if err != nil {
 		if errors.IsNotFound(err) {
-			// Create ConfigMap
-			glog.Info("Create ConfigMap")
+			glog.Info("Create ConfigMap for %s/%s", namespace, name)
 			configmap, err = c.kubeClient.CoreV1().ConfigMaps(namespace).Create(newConfigMap(function, functionConfig))
 		}
 	} else {
-		glog.Info("Update ConfigMap")
 		newConfigMap := newConfigMap(function, functionConfig)
 
 		curHash := hash(configmap)
 		newHash := hash(newConfigMap)
 
-		glog.Infof("Current: %s, New: %s", curHash, newHash)
-
-		// Update ConfigMap if the content has changed
 		if curHash != newHash {
+			glog.Info("Update ConfigMap for %s/%s", namespace, name)
 			configmap, err = c.kubeClient.CoreV1().ConfigMaps(namespace).Update(newConfigMap)
 		}
 	}
-
-	glog.Infof("%+v", configmap)
 
 	if err != nil {
 		return err
@@ -222,20 +194,17 @@ func (c *Controller) syncHandler(key string) error {
 	deployement, err := c.deployementLister.Deployments(namespace).Get(name)
 	if err != nil {
 		if errors.IsNotFound(err) {
-			// Create Deployement
-			glog.Info("Create Deployement")
+			glog.Info("Create Deployement for %s/%s", namespace, name)
 			deployement, err = c.kubeClient.AppsV1().Deployments(namespace).Create(newDeployement(function, configmap))
 		}
 	} else {
-		glog.Info("Update Deployement")
 		newDeployement := newDeployement(function, configmap)
 
 		if *newDeployement.Spec.Replicas != *deployement.Spec.Replicas || newDeployement.Spec.Template.Spec.Containers[0].Image != deployement.Spec.Template.Spec.Containers[0].Image || newDeployement.Spec.Template.Annotations["kfn.dajac.io/config-hash"] != deployement.Spec.Template.Annotations["kfn.dajac.io/config-hash"] {
+			glog.Info("Update Deployement for %s/%s", namespace, name)
 			deployement, err = c.kubeClient.AppsV1().Deployments(namespace).Update(newDeployement)
 		}
 	}
-
-	glog.Infof("%+v", deployement)
 
 	if err != nil {
 		return err
@@ -267,7 +236,6 @@ func (c *Controller) enqueueFunction(obj interface{}) {
 		runtime.HandleError(err)
 		return
 	}
-	glog.Infof("Enqueue Function %s", key)
 	c.workqueue.AddRateLimited(key)
 }
 
@@ -287,7 +255,7 @@ func (c *Controller) handleObject(obj interface{}) {
 		}
 		glog.V(4).Infof("Recovered deleted object '%s' from tombstone", object.GetName())
 	}
-	glog.V(4).Infof("Processing object: %s", object.GetName())
+
 	if ownerRef := metav1.GetControllerOf(object); ownerRef != nil {
 		if ownerRef.Kind != "Function" {
 			return
@@ -298,8 +266,6 @@ func (c *Controller) handleObject(obj interface{}) {
 			glog.V(4).Infof("ignoring orphaned object '%s' of Function '%s'", object.GetSelfLink(), ownerRef.Name)
 			return
 		}
-
-		glog.Infof("Enqueue Function %s/%s due to %s/%s", function.Namespace, function.Name, object.GetNamespace(), object.GetName())
 
 		c.enqueueFunction(function)
 		return

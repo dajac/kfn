@@ -10,32 +10,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 )
 
-/* Example
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kfn-copy-function-config
-  namespace: default
-data:
-  function.properties: |-
-    consumer.bootstrap.servers=kafka-headless:9092
-    consumer.group.id=copy-function
-    consumer.auto.offset.reset=earliest
-    consumer.key.deserializer=org.apache.kafka.common.serialization.ByteArrayDeserializer
-    consumer.value.deserializer=org.apache.kafka.common.serialization.ByteArrayDeserializer
-
-    producer.bootstrap.servers=kafka-headless:9092
-    producer.acks=all
-    producer.retries=3
-    producer.key.serializer=org.apache.kafka.common.serialization.ByteArraySerializer
-    producer.value.serializer=org.apache.kafka.common.serialization.ByteArraySerializer
-
-    function.name=copy-function
-    function.class=io.dajac.kfn.functions.CopyFunction
-    function.input=dajac.dev.input
-	function.output=dajac.dev.output
-*/
-
 func newConfigMap(function *kfnv1alpha1.Function, config *FunctionConfig) *corev1.ConfigMap {
 	return &corev1.ConfigMap{
 		ObjectMeta: metav1.ObjectMeta{

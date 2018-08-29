@@ -9,45 +9,6 @@ import (
 	kfnv1alpha1 "github.com/dajac/kfn/pkg/apis/kfn/v1alpha1"
 )
 
-/* Example
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: kfn-copy-function
-  labels:
-    app: kfn-copy-function
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: kfn-copy-function
-  template:
-    metadata:
-      labels:
-        app: kfn-copy-function
-    spec:
-      containers:
-      - name: kfn-invoker
-        image: dajac/kfn-invoker:0.1.0
-        imagePullPolicy: Always
-        command:
-          - /usr/bin/java
-          - -cp
-          - /usr/lib/kfn/*
-          - io.dajac.kfn.invoker.FunctionInvoker
-          - /etc/kfn/function.properties
-        volumeMounts:
-        - name: config-vol
-          mountPath: /etc/kfn
-      volumes:
-      - name: config-vol
-        configMap:
-          name: kfn-copy-function-config
-          items:
-          - key: function.properties
-			path: function.properties
-*/
-
 func newDeployement(function *kfnv1alpha1.Function, configMap *corev1.ConfigMap) *appsv1.Deployment {
 	labels := map[string]string{
 		"function": function.Name,

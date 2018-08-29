@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/dajac/kfn/pkg/apis/kfn/v1alpha1"
-	"github.com/golang/glog"
 )
 
 // FunctionDefaultConfig contains the default configuration used for each Function.
@@ -36,15 +35,11 @@ func newFunctionConfig(
 		Producer: make(map[string]string),
 	}
 
-	glog.Infof("%+v", defaultConfig)
-
 	// Default config
 	cfg.setKafkaBootstrapProperties(defaultConfig.KafkaBoostrap)
 	cfg.overrideFunctionProperties(defaultConfig.Function)
 	cfg.overrideConsumerProperties(defaultConfig.Consumer)
 	cfg.overrideProducerProperties(defaultConfig.Producer)
-
-	glog.Infof("%+v", cfg)
 
 	// Function config
 	cfg.setFunctionProperties(function)
