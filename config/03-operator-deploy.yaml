@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kfn-operator
+  namespace: kfn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kfn-operator
+  template:
+    metadata:
+      labels:
+        app: kfn-operator
+    spec:
+      serviceAccountName: kfn-operator
+      containers:
+      - name: kfn-operator
+        image: dajac/kfn-operator:0.0.1
+        imagePullPolicy: Always
+        command:
+          - /kfn-operator
+          - --stderrthreshold=INFO
+          - --consumer=auto.offset.reset:earliest
+          - --kafka=kafka-headless:9092
