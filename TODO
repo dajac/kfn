@@ -1,7 +1,0 @@
-- Clean logs
-- Autoscaler based on the lag
-- Publish Java API
-- Exemple of Function which uses the Java API
-- CLI (install, build, deploy)
-- Set version/hash in the binaties when compiling
-- Release script - build and push docker image, build and release cli
