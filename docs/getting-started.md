@@ -10,7 +10,21 @@ Before you begin, you need:
 
 This guide uses the [CopyFunction sample Function in Java](https://github.com/dajac/kfn-examples/blob/master/src/main/java/io/dajac/kfn/examples/CopyFunction.java) to demonstrate the basic workflow for deploying a Function, but these steps can be adapted for your own Function if you have an image available on Docker Hub, or another container image registry.
 
-The CopyFunction reads messages from a given topic and writes them to another one.
+The `CopyFunction` reads messages from a given topic and writes them to another one.
+
+```java
+package io.dajac.kfn.examples;
+
+import io.dajac.kfn.invoker.Function;
+import io.dajac.kfn.invoker.KeyValue;
+
+public class CopyFunction implements Function<byte[], byte[], byte[], byte[]> {
+    @Override
+    public KeyValue<byte[], byte[]> apply(byte[] key, byte[] value) {
+        return KeyValue.pair(key, value);
+    }
+}
+```
 
 ### Configuring your Function
 
