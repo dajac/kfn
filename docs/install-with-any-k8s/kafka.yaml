@@ -91,7 +91,10 @@ spec:
           protocol: TCP
         volumeMounts:
         - mountPath: /opt/kafka/data
-          name: emptydir
+          name: datadir
+      volumes:
+      - name: datadir
+        emptyDir: {}
       restartPolicy: Always
   updateStrategy:
     type: RollingUpdate

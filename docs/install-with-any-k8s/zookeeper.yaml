@@ -109,9 +109,14 @@ spec:
           protocol: TCP
         volumeMounts:
         - mountPath: /var/lib/zookeeper/data
-          name: emptydir
+          name: datadir
         - mountPath: /var/lib/zookeeper/log
-          name: emptydir
+          name: datalogdir
+      volumes:
+      - name: datadir
+        emptyDir: {}
+      - name: datalogdir
+        emptyDir: {}
       restartPolicy: Always
   updateStrategy:
     type: RollingUpdate
