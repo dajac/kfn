@@ -15,9 +15,9 @@ KFn Functions will consume from and produce to a Kafka cluster. The Schema Regis
 1. Run the `kubectl apply` commands to install all the components in the `default` namespace:
 
 ```bash
-kubectl apply -f zookeeper.yaml
-kubectl apply -f kafka.yaml
-kubectl apply -f schema-registry.yaml
+kubectl apply -f https://raw.githubusercontent.com/dajac/kfn/master/docs/install-with-any-k8s/zookeeper.yaml
+kubectl apply -f https://raw.githubusercontent.com/dajac/kfn/master/docs/install-with-any-k8s/kafka.yaml
+kubectl apply -f https://raw.githubusercontent.com/dajac/kfn/master/docs/install-with-any-k8s/schema-registry.yaml
 ```
 
 2. Monitor the components until all components show a `STATUS` of `Running`:
@@ -28,7 +28,7 @@ kubectl get pods
 
 ## Installing KFn
 
-KFn can be installed by using the manifest provided in the releases (link). If you use our default Kafka setup, you can directly deploy the manifest. Otherwise, you have to adapt the Kafka's FQDN in the manifest to target your cluster.
+KFn can be installed by using the manifest provided in the [releases](https://github.com/dajac/kfn/releases). If you use our default Kafka setup, you can directly deploy the manifest. Otherwise, you have to adapt the Kafka's FQDN in the manifest to target your cluster.
 
 1. Run the `kubectl apply` command to install the KFn operator in the `kfn` namespace":
 
@@ -50,4 +50,4 @@ kubectl get functions
 
 ## Deploying a Function
 
-Now that your cluster has KFn installed, you're ready to deploy a Function. You can follow the step-by-step Getting Started[link] guide.
+Now that your cluster has KFn installed, you're ready to deploy a Function. You can follow the step-by-step [Getting Started](https://github.com/dajac/kfn/blob/master/docs/getting-started.md) guide.
