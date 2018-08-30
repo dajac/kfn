@@ -43,22 +43,22 @@ Before deploying your Function, you need to create the topics that it uses.
 
 1. Run `kubectl apply` command to deploy a kafka client:
 
-```bash
-kubectl apply -f https://raw.githubusercontent.com/dajac/kfn/master/docs/install-with-any-k8s/kafka-client.yaml
-```
+    ```bash
+    kubectl apply -f https://raw.githubusercontent.com/dajac/kfn/master/docs/install-with-any-k8s/kafka-client.yaml
+    ```
 
 2. Use `kubectl exec` command to open a shell within the container:
 
-```bash
-kubectl exec -ti kafka-client bin/sh
-```
+    ```bash
+    kubectl exec -ti kafka-client bin/sh
+    ```
 
 3. Create the topics with the `kafka-topics` command:
 
-```bash
-/usr/bin/kafka-topics --zookeeper zookeeper:2181 --create --topic kfn.source --partitions 5 --replication-factor 1
-/usr/bin/kafka-topics --zookeeper zookeeper:2181 --create --topic kfn.destination --partitions 5 --replication-factor 1
-```
+    ```bash
+    /usr/bin/kafka-topics --zookeeper zookeeper:2181 --create --topic kfn.source --partitions 5 --replication-factor 1
+    /usr/bin/kafka-topics --zookeeper zookeeper:2181 --create --topic kfn.destination --partitions 5 --replication-factor 1
+    ```
 
 ## Deploying your Function
 
@@ -86,27 +86,27 @@ To validate the deployement, let's produce few messages to the intut topic of yo
 
 1. Run `kubectl apply` command to deploy a kafka client:
 
-```bash
-kubectl apply -f https://raw.githubusercontent.com/dajac/kfn/master/docs/install-with-any-k8s/kafka-client.yaml
-```
+    ```bash
+    kubectl apply -f https://raw.githubusercontent.com/dajac/kfn/master/docs/install-with-any-k8s/kafka-client.yaml
+    ```
 
 2. Use `kubectl exec` command to open a shell within the container:
 
-```bash
-kubeclt exec -ti kafka-client bin/sh
-```
+    ```bash
+    kubectl exec -ti kafka-client bin/sh
+    ```
 
 3. Produce few messages with the `kafka-console-producer` command:
 
-```bash
-/usr/bin/kafka-console-producer --broker-list kafka-headless:9092 --topic kfn.source
-```
+    ```bash
+    /usr/bin/kafka-console-producer --broker-list kafka-headless:9092 --topic kfn.source
+    ```
 
 4. Consume the messages with the `kafka-console-consumer` command:
 
-```bash
-/usr/bin/kafka-console-consumer --bootstrap-server kafka-headless:9092 --topic kfn.destination --from-beginning
-```
+    ```bash
+    /usr/bin/kafka-console-consumer --bootstrap-server kafka-headless:9092 --topic kfn.destination --from-beginning
+    ```
 
 ## Scaling up and down your Function
 
