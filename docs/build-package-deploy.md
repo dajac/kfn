@@ -10,7 +10,7 @@ Before you begin, you need:
 
 ## Build
 
-To build a Function with KFn, you can use the following instructions. Instructions are based on this [template](https://github.com/dajac/kfn-template).
+To build a Function with KFn, you can use the following instructions. Instructions are based on this [Java template](https://github.com/dajac/kfn-template/tree/master/java).
 
 1. Create a `pom.xml` that includes the kfn-invoker as a dependency:
 
