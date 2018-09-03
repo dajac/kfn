@@ -25,6 +25,7 @@ KFn (Kafka Function) is a framework for building serverless Functions for Apache
 
 * [kfn-invoker](https://github.com/dajac/kfn-invoker) - The KFn invoker used in the container to invoke the Function
 * [kfn-examples](https://github.com/dajac/kfn-examples) - Examples
+* [kfn-template](https://github.com/dajac/kfn-template) - Templates
 
 ## Known Limitations
 
