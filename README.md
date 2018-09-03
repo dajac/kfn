@@ -18,6 +18,7 @@ KFn (Kafka Function) is a framework for building serverless Functions for Apache
 * [Installing KFn](https://github.com/dajac/kfn/blob/master/docs/install-with-any-k8s.md)
 * [Getting Started with KFn Function Deployement](https://github.com/dajac/kfn/blob/master/docs/getting-started.md)
 * [Deploy advanced KFn Functions](https://github.com/dajac/kfn/blob/master/docs/advanced-example.md)
+* [Build and Deploy your own KFn Functions](https://github.com/dajac/kfn/blob/master/docs/build-package-deploy.md)
 
 ## Dependencies
 
