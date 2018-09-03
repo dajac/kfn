@@ -4,9 +4,7 @@ This guide walks you through the installation of the latest version of KFn using
 
 ## Before you begin
 
-KFn requires a Kubernetes cluster v1.11 or newer. kubectl v1.11 is also required. This guide assumes that you've created a Kubernetes cluster which you're comfortable installing alpha software on.
-
-This guide assumes that you're using bash in a Mac or Linux environment.
+KFn requires a Kubernetes cluster v1.11 or newer. `kubectl` v1.11 is also required. This guide assumes that you've created a Kubernetes cluster which you're comfortable installing alpha software on. This guide assumes that you're using bash in a Mac or Linux environment.
 
 ## Installing Zookeeper, Kafka and Schema Registry
 

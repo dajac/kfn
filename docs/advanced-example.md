@@ -9,7 +9,7 @@ Before you begin, you need:
 
 ## Multiple Functions
 
-This guide uses the [JsonToAvroFunction](https://github.com/dajac/kfn-examples/blob/master/src/main/java/io/dajac/kfn/examples/JsonToAvroFunction.java) and [HashFieldFunction](https://github.com/dajac/kfn-examples/blob/master/src/main/java/io/dajac/kfn/examples/HashFieldFunction.java) to demonstrate the deployement of more complexe Functions. Let's assume that your have a topic containing message serialised in JSON format. As a data engineer, you would like to transform that topic to have it serialised in Avro format and, moreover, you would like to have a version it where one of the field is hashed to anonymise the data.
+This guide uses the [JsonToAvroFunction](https://github.com/dajac/kfn-examples/blob/master/src/main/java/io/dajac/kfn/examples/JsonToAvroFunction.java) and [HashFieldFunction](https://github.com/dajac/kfn-examples/blob/master/src/main/java/io/dajac/kfn/examples/HashFieldFunction.java) to demonstrate the deployement of two Functions. Let's assume that your have a topic containing message serialised in JSON format. You would like to transform that topic to have it serialised in Avro format and you would like to have another topic where one of the field is hashed to anonymise the data.
 
 ## Configuring your Functions
 

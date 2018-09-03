@@ -6,7 +6,8 @@ KFn (Kafka Function) is a framework for building serverless Functions for Apache
 
 ## Highligths
 
-* Support any JVM based languages (Java, Clojure, Scala, etc.), and package in Docker image
+* Support any JVM based languages (Java, Clojure, Scala, etc.)
+* Package Function in Docker image
 * Use the native Kafka Java consumer and producer, no stdin/stdout nor RPC between the Function and Kafka
 * Use Custom Ressource Definition in Kubernetes
 * Automatic rolling restart when the config changes
@@ -18,7 +19,7 @@ KFn (Kafka Function) is a framework for building serverless Functions for Apache
 * [Installing KFn](https://github.com/dajac/kfn/blob/master/docs/install-with-any-k8s.md)
 * [Getting Started with KFn Function Deployement](https://github.com/dajac/kfn/blob/master/docs/getting-started.md)
 * [Deploy advanced KFn Functions](https://github.com/dajac/kfn/blob/master/docs/advanced-example.md)
-* [Build and Deploy your own KFn Functions](https://github.com/dajac/kfn/blob/master/docs/build-package-deploy.md)
+* [Build and Deploy your own KFn Function](https://github.com/dajac/kfn/blob/master/docs/build-package-deploy.md)
 
 ## Dependencies
 
