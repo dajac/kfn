@@ -1,4 +1,4 @@
-# KFn - Serverless Function made easy for Apache Kafka
+# KFn - Function as a Service (FaaS) for Apache Kafka
 
 KFn (Kafka Function) is a framework for building serverless Functions for Apache Kafka. It lets you deploy functions written in Java or any JVM based languages, without having to worry about the underlying infrastructure. KFn leverages Kubernetes ressources to make it happen.
 
